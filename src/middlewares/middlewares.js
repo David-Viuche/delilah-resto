@@ -1,4 +1,4 @@
-const { generateToken, validateToken } = require('./jwt');
+const { validateToken } = require('./jwt');
 
 module.exports = {
 
@@ -8,8 +8,12 @@ module.exports = {
         if (auth) {
             const token = auth.split(' ')[1];
             const user = validateToken(token);
-            req.params.user = user;
-            next();
+            if (user) {
+                req.params.user = user;
+                next();
+            } else {
+                res.status(401).json({ msg: 'Missing token or invalid' })
+            }
         } else {
             res.status(401).json({ msg: 'Missing token or invalid' })
         }
@@ -41,5 +45,20 @@ module.exports = {
         } else {
             res.status(401).json({ error: 'Unauthorized user to do this operation' });
         }
+    },
+
+    validateUserId(req, res, next) {
+        const { user, idUser } = req.params;
+
+        if (user.user_admin == 0 && user.user_id == idUser) {
+            next();
+        } else {
+            if (user.user_admin == 1) {
+                next();
+            } else {
+                res.status(401).json({ error: 'Unauthorized user to perform this operation, you cannot access the data of other users' });
+            }
+        }
+
     }
 }

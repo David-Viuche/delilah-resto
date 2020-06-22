@@ -70,4 +70,76 @@ controller.registerUser = (req, res) => {
         });
 }
 
+controller.userById = (req, res) => {
+    const userId = req.params.idUser;
+    db.query('SELECT * FROM Users WHERE user_id = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [userId]
+        })
+        .then(result => {
+            if (result.length != 0) {
+                res.json(result);
+            } else {
+                res.status(404).json({ error: 'user not found' });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'internal error' });
+        });
+}
+
+controller.updateUserById = (req, res) => {
+    const userId = req.params.idUser;
+    const { user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin } = req.body;
+    db.query('UPDATE Users SET user_name = ?, user_lastname = ?, user_mail = ?, user_phone = ?, user_password = ?, user_address = ?, user_admin = ? WHERE user_id = ?',
+        {
+            type: Sequelize.QueryTypes.UPDATE,
+            replacements: [user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin, userId]
+        })
+        .then(result => {
+            if (result[1] != 0) {
+                res.json({ msg: 'user successfully updated' });
+            } else {
+                db.query('SELECT * FROM Users WHERE user_id = ?',
+                    {
+                        type: Sequelize.QueryTypes.SELECT,
+                        replacements: [userId]
+                    })
+                    .then(result => {
+                        if (result.length != 0) {
+                            res.json({ msg: 'user successfully updated' });
+                        } else {
+                            res.status(404).json({ error: 'user not found' });
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({ error: 'internal error' });
+                    });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'internal error' });
+        });
+}
+
+controller.deleteUserById = (req, res) => {
+    const userId = req.params.idUser;
+    db.query('DELETE FROM Users WHERE user_id = ?',
+        {
+            type: Sequelize.QueryTypes.DELETE,
+            replacements: [userId]
+        })
+        .then(result => {
+            res.json({ msg: 'user successfully deleted' });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'internal error' });
+        });
+}
+
 module.exports = controller;
