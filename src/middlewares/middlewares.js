@@ -60,5 +60,15 @@ module.exports = {
             }
         }
 
-    }
+    },
+
+    validateProductParams(req, res, next) {
+        const { product_name, product_price, product_description } = req.body;
+
+        if (product_name && product_price && product_description) {
+            next();
+        } else {
+            res.status(400).json({ error: "Invalidate params all parameters are necessary" });
+        }
+    },
 }
