@@ -54,6 +54,22 @@ controller.singinUser = (req, res) => {
         });
 }
 
+controller.logoutUser = (req, res) => {
+    const userId = req.params.idUser;
+    db.query('UPDATE Users SET user_active = 0 WHERE user_id = ?',
+        {
+            type: Sequelize.QueryTypes.UPDATE,
+            replacements: [userId]
+        })
+        .then((result) => {
+            res.json({ msg: 'User logout' });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'internal error' });
+        });
+}
+
 controller.registerUser = (req, res) => {
     const { user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin } = req.body;
     db.query('INSERT INTO Users (user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin) VALUES (?,?,?,?,?,?,?)',
@@ -99,26 +115,7 @@ controller.updateUserById = (req, res) => {
             replacements: [user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin, userId]
         })
         .then(result => {
-            if (result[1] != 0) {
-                res.json({ msg: 'user successfully updated' });
-            } else {
-                db.query('SELECT * FROM Users WHERE user_id = ?',
-                    {
-                        type: Sequelize.QueryTypes.SELECT,
-                        replacements: [userId]
-                    })
-                    .then(result => {
-                        if (result.length != 0) {
-                            res.json({ msg: 'user successfully updated' });
-                        } else {
-                            res.status(404).json({ error: 'user not found' });
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.status(500).json({ error: 'internal error' });
-                    });
-            }
+            res.json({ msg: 'user successfully updated' });
         })
         .catch(err => {
             console.log(err);

@@ -10,13 +10,15 @@ const {
 const {
     validateToken,
     validateRol,
-    validateProductParams
+    validateProductParams,
+    validateProductId,
+    validateSesionUser
 } = require('../middlewares/middlewares');
 
 router.get('/', products);
-router.post('/', [validateToken, validateRol], createProduct)
+router.post('/', [validateToken, validateSesionUser, validateRol], createProduct)
 router.get('/:idProduct', productById);
-router.put('/:idProduct', [validateToken, validateRol, validateProductParams], updateProduct);
-router.delete('/:idProduct', [validateToken, validateRol], deleteProductById);
+router.put('/:idProduct', [validateToken, validateSesionUser, validateRol, validateProductId, validateProductParams], updateProduct);
+router.delete('/:idProduct', [validateToken, validateSesionUser, validateRol, validateProductId], deleteProductById);
 
 module.exports = router;

@@ -62,26 +62,7 @@ controller.updateProduct = (req, res) => {
             replacements: [product_name, product_price, product_description, productId]
         })
         .then(result => {
-            if (result[1] != 0) {
-                res.json({ msg: 'product successfully updated' });
-            } else {
-                db.query('SELECT * FROM Products WHERE product_id = ?',
-                    {
-                        type: Sequelize.QueryTypes.SELECT,
-                        replacements: [productId]
-                    })
-                    .then(result => {
-                        if (result.length != 0) {
-                            res.json({ msg: 'product successfully updated' });
-                        } else {
-                            res.status(404).json({ error: 'product not found' });
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.status(500).json({ error: 'internal error' });
-                    });
-            }
+            res.json({ msg: 'product successfully updated' });
         })
         .catch(err => {
             console.log(err);

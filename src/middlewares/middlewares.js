@@ -1,4 +1,5 @@
 const { validateToken } = require('./jwt');
+const { db, Sequelize } = require('../../database');
 
 module.exports = {
 
@@ -62,6 +63,46 @@ module.exports = {
 
     },
 
+    validateExistingUserId(req, res, next) {
+        const userId = req.params.idUser;
+        db.query('SELECT * FROM Users WHERE user_id = ?',
+            {
+                type: Sequelize.QueryTypes.SELECT,
+                replacements: [userId]
+            })
+            .then(result => {
+                if (result.length != 0) {
+                    next();
+                } else {
+                    res.status(404).json({ error: 'user not found' });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: 'internal error' });
+            });
+    },
+
+    validateSesionUser(req, res, next){
+        const user = req.params.user;
+        db.query('SELECT * FROM Users WHERE user_id = ?',
+            {
+                type: Sequelize.QueryTypes.SELECT,
+                replacements: [user.user_id]
+            })
+            .then(result => {
+                if (result[0].user_active != 0) {
+                    next();
+                } else {
+                    res.status(401).json({ error: 'user is not logged in' });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: 'internal error' });
+            });
+    },
+
     validateProductParams(req, res, next) {
         const { product_name, product_price, product_description } = req.body;
 
@@ -71,4 +112,24 @@ module.exports = {
             res.status(400).json({ error: "Invalidate params all parameters are necessary" });
         }
     },
+
+    validateProductId(req, res, next) {
+        const productId = req.params.idProduct;
+        db.query('SELECT * FROM Products WHERE product_id = ?',
+            {
+                type: Sequelize.QueryTypes.SELECT,
+                replacements: [productId]
+            })
+            .then(result => {
+                if (result.length != 0) {
+                    next();
+                } else {
+                    res.status(404).json({ error: 'product not found' });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: 'internal error' });
+            });
+    }
 }

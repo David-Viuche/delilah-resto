@@ -5,7 +5,8 @@ const {
     registerUser,
     userById,
     updateUserById,
-    deleteUserById
+    deleteUserById,
+    logoutUser
 } = require('../controllers/userControllers');
 
 const {
@@ -13,14 +14,17 @@ const {
     validateSigninParams,
     validateRegisterParams,
     validateRol,
-    validateUserId
+    validateUserId,
+    validateExistingUserId,
+    validateSesionUser
 } = require('../middlewares/middlewares');
 
-router.get('/', [validateToken, validateRol], users);
+router.get('/', [validateToken, validateSesionUser, validateRol], users);
 router.post('/singin', [validateSigninParams], singinUser);
+router.post('/logout/:idUser', [validateToken, validateSesionUser, validateUserId, validateExistingUserId], logoutUser);
 router.post('/', [validateRegisterParams], registerUser);
-router.get('/:idUser', [validateToken, validateUserId], userById);
-router.put('/:idUser', [validateToken, validateUserId, validateRegisterParams], updateUserById);
-router.delete('/:idUser', [validateToken, validateRol], deleteUserById);
+router.get('/:idUser', [validateToken, validateSesionUser, validateUserId], userById);
+router.put('/:idUser', [validateToken, validateSesionUser, validateUserId, validateExistingUserId, validateRegisterParams], updateUserById);
+router.delete('/:idUser', [validateToken, validateSesionUser, validateRol, validateExistingUserId], deleteUserById);
 
 module.exports = router;
