@@ -1,9 +1,7 @@
 const { db, Sequelize } = require('../../database');
 const { generateToken } = require('../middlewares/jwt');
 
-const controller = {}
-
-controller.users = (req, res) => {
+const users = (req, res) => {
     db.query('SELECT * FROM Users',
         {
             type: Sequelize.QueryTypes.SELECT
@@ -11,10 +9,13 @@ controller.users = (req, res) => {
         .then((users) => {
             res.json(users);
         })
-
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'internal error' });
+        });
 }
 
-controller.singinUser = (req, res) => {
+const singinUser = (req, res) => {
     const { user_mail, user_password } = req.body;
     db.query('SELECT * FROM Users Where user_mail = ? AND user_password = ?',
         {
@@ -36,6 +37,7 @@ controller.singinUser = (req, res) => {
                         res.json({
                             token: token,
                             user: {
+                                user_id,
                                 user_name,
                                 user_lastname,
                                 user_phone,
@@ -54,7 +56,7 @@ controller.singinUser = (req, res) => {
         });
 }
 
-controller.logoutUser = (req, res) => {
+const logoutUser = (req, res) => {
     const userId = req.params.idUser;
     db.query('UPDATE Users SET user_active = 0 WHERE user_id = ?',
         {
@@ -70,7 +72,7 @@ controller.logoutUser = (req, res) => {
         });
 }
 
-controller.registerUser = (req, res) => {
+const registerUser = (req, res) => {
     const { user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin } = req.body;
     db.query('INSERT INTO Users (user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin) VALUES (?,?,?,?,?,?,?)',
         {
@@ -78,7 +80,7 @@ controller.registerUser = (req, res) => {
             replacements: [user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin]
         })
         .then(result => {
-            res.json({ msg: 'user successfully created' });
+            res.status(201).json({ msg: 'user successfully created' });
         })
         .catch(err => {
             console.log(err);
@@ -86,7 +88,7 @@ controller.registerUser = (req, res) => {
         });
 }
 
-controller.userById = (req, res) => {
+const userById = (req, res) => {
     const userId = req.params.idUser;
     db.query('SELECT * FROM Users WHERE user_id = ?',
         {
@@ -106,7 +108,7 @@ controller.userById = (req, res) => {
         });
 }
 
-controller.updateUserById = (req, res) => {
+const updateUserById = (req, res) => {
     const userId = req.params.idUser;
     const { user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin } = req.body;
     db.query('UPDATE Users SET user_name = ?, user_lastname = ?, user_mail = ?, user_phone = ?, user_password = ?, user_address = ?, user_admin = ? WHERE user_id = ?',
@@ -123,7 +125,7 @@ controller.updateUserById = (req, res) => {
         });
 }
 
-controller.deleteUserById = (req, res) => {
+const deleteUserById = (req, res) => {
     const userId = req.params.idUser;
     db.query('DELETE FROM Users WHERE user_id = ?',
         {
@@ -139,4 +141,12 @@ controller.deleteUserById = (req, res) => {
         });
 }
 
-module.exports = controller;
+module.exports = {
+    users,
+    singinUser,
+    logoutUser,
+    registerUser,
+    userById,
+    updateUserById,
+    deleteUserById
+}

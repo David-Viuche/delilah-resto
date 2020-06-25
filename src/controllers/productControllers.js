@@ -1,8 +1,6 @@
 const { db, Sequelize } = require('../../database');
 
-const controller = {}
-
-controller.products = (req, res) => {
+const products = (req, res) => {
     db.query('SELECT * FROM Products',
         {
             type: Sequelize.QueryTypes.SELECT
@@ -16,7 +14,7 @@ controller.products = (req, res) => {
         });
 }
 
-controller.productById = (req, res) => {
+const productById = (req, res) => {
     const productId = req.params.idProduct;
     db.query('SELECT * FROM Products WHERE product_id = ?',
         {
@@ -36,7 +34,7 @@ controller.productById = (req, res) => {
         });
 }
 
-controller.createProduct = (req, res) => {
+const createProduct = (req, res) => {
     const { product_name, product_price, product_description } = req.body;
 
     db.query('INSERT INTO Products (product_name, product_price, product_description) VALUES (?,?,?)',
@@ -45,7 +43,7 @@ controller.createProduct = (req, res) => {
             replacements: [product_name, product_price, product_description]
         })
         .then(result => {
-            res.json({ msg: 'product successfully created' });
+            res.status(201).json({ msg: 'product successfully created' });
         })
         .catch(err => {
             console.log(err);
@@ -53,7 +51,7 @@ controller.createProduct = (req, res) => {
         });
 }
 
-controller.updateProduct = (req, res) => {
+const updateProduct = (req, res) => {
     const productId = req.params.idProduct;
     const { product_name, product_price, product_description } = req.body;
     db.query('UPDATE Products SET product_name = ?, product_price = ?, product_description = ? WHERE product_id = ?',
@@ -70,7 +68,7 @@ controller.updateProduct = (req, res) => {
         });
 }
 
-controller.deleteProductById = (req, res) => {
+const deleteProductById = (req, res) => {
     const productId = req.params.idProduct;
     db.query('DELETE FROM Products WHERE product_id = ?',
         {
@@ -86,5 +84,10 @@ controller.deleteProductById = (req, res) => {
         });
 }
 
-
-module.exports = controller;
+module.exports = {
+    products,
+    productById,
+    createProduct,
+    updateProduct,
+    deleteProductById
+}   
