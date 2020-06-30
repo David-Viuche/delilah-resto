@@ -2,7 +2,8 @@ const { db, Sequelize } = require('../../database');
 
 const createOrder = (req, res) => {
 
-    const { order_description, order_form_payment, order_total_price, order_id_user, order_products } = req.body;
+    const { order_description, order_form_payment, order_total_price, order_products } = req.body;
+    const order_id_user = req.params.user.user_id;
 
     db.query('INSERT INTO Orders (order_description, order_form_payment, order_total_price, order_id_user) VALUES (?,?,?,?)',
         {
@@ -88,8 +89,28 @@ const orderById = async (req, res) => {
     res.json(result);
 }
 
+const updateOrder = (req, res) => {
+
+    const orderId = req.params.idOrder;
+    const { order_state } = req.body;
+
+    db.query('UPDATE Orders SET order_state = ? WHERE order_id = ?',
+        {
+            type: Sequelize.QueryTypes.UPDATE,
+            replacements: [order_state, orderId]
+        })
+        .then(result => {
+            res.json({ msg: 'order successfully updated' });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'internal error' });
+        });
+}
+
 module.exports = {
     createOrder,
     allOrders,
-    orderById
+    orderById,
+    updateOrder
 }

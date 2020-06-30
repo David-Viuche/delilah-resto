@@ -16,9 +16,9 @@ const {
 } = require('../middlewares/middlewares');
 
 router.get('/', products);
-router.post('/', [validateToken, validateSesionUser, validateRol], createProduct)
+router.post('/admin', [validateToken, validateSesionUser, validateRol], createProduct)
 router.get('/:idProduct', productById);
-router.put('/:idProduct', [validateToken, validateSesionUser, validateRol, validateProductId, validateProductParams], updateProduct);
-router.delete('/:idProduct', [validateToken, validateSesionUser, validateRol, validateProductId], deleteProductById);
+router.put('/admin/:idProduct', [validateToken, validateSesionUser, validateRol, validateProductId, validateProductParams], updateProduct);
+router.delete('/admin/:idProduct', [validateToken, validateSesionUser, validateRol, validateProductId], deleteProductById);
 
 module.exports = router;

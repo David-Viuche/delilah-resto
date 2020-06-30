@@ -2,20 +2,24 @@ const router = require('express').Router();
 const {
     createOrder,
     allOrders,
-    orderById
+    orderById,
+    updateOrder
 } = require('../controllers/orderControllers');
 
 const {
     validateOrderParams,
     validateToken,
-    validateOnlyClients,
     validateSesionUser,
     validateExistingOrderId,
-    validateOrdersByRol
+    validateOrdersByRol,
+    validateOrderStateParams,
+    validateExistingOrder,
+    validateRol
 } = require('../middlewares/middlewares');
 
 router.get('/', [validateToken, validateSesionUser, validateOrdersByRol], allOrders);
-router.post('/', [validateToken, validateOnlyClients, validateSesionUser, validateOrderParams], createOrder);
 router.get('/:idOrder', [validateToken, validateSesionUser, validateExistingOrderId], orderById);
+router.post('/', [validateToken, validateSesionUser, validateOrderParams], createOrder);
+router.patch('/admin/:idOrder', [validateToken, validateSesionUser, validateRol, validateOrderStateParams, validateExistingOrder], updateOrder);
 
 module.exports = router;

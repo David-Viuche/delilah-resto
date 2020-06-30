@@ -57,11 +57,11 @@ const singinUser = (req, res) => {
 }
 
 const logoutUser = (req, res) => {
-    const userId = req.params.idUser;
+    const { user_id } = req.params.user;
     db.query('UPDATE Users SET user_active = 0 WHERE user_id = ?',
         {
             type: Sequelize.QueryTypes.UPDATE,
-            replacements: [userId]
+            replacements: [user_id]
         })
         .then((result) => {
             res.json({ msg: 'User logout' });
@@ -73,11 +73,11 @@ const logoutUser = (req, res) => {
 }
 
 const registerUser = (req, res) => {
-    const { user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin } = req.body;
-    db.query('INSERT INTO Users (user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin) VALUES (?,?,?,?,?,?,?)',
+    const { user_name, user_lastname, user_mail, user_phone, user_password, user_address } = req.body;
+    db.query('INSERT INTO Users (user_name, user_lastname, user_mail, user_phone, user_password, user_address) VALUES (?,?,?,?,?,?)',
         {
             type: Sequelize.QueryTypes.INSERT,
-            replacements: [user_name, user_lastname, user_mail, user_phone, user_password, user_address, user_admin]
+            replacements: [user_name, user_lastname, user_mail, user_phone, user_password, user_address]
         })
         .then(result => {
             res.status(201).json({ msg: 'user successfully created' });
