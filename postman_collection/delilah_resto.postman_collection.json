@@ -42,7 +42,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2FkbWluIjoxLCJpYXQiOjE1OTM1NTE5MjN9.HjVknGNSupa01tJXKW_pdjh-uJYZVD3h_xHHYW8LKvE",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2FkbWluIjoxLCJpYXQiOjE1OTM2MzI3Mzl9._uEXV2dQrZE_di6BgGx1ckIewHqqzygQPzJt8oHmL8o",
 							"type": "string"
 						}
 					]
@@ -407,7 +407,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2FkbWluIjoxLCJpYXQiOjE1OTM1NDEwNjN9.CzQ8pkIXwTt0eueosh2dSf_m4SxUdag2SW7NeJUHTks",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2FkbWluIjoxLCJpYXQiOjE1OTM2MzI1OTd9.tzEQ6Jz9Gl6okeCzcrHiucpm0HMRctvaFVy7Ahq8xHU",
 							"type": "string"
 						}
 					]
@@ -531,6 +531,37 @@
 						"orders",
 						"admin",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete  Order  by Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2FkbWluIjoxLCJpYXQiOjE1OTM2MzI1OTd9.tzEQ6Jz9Gl6okeCzcrHiucpm0HMRctvaFVy7Ahq8xHU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/orders/admin/20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"orders",
+						"admin",
+						"20"
 					]
 				}
 			},

@@ -108,9 +108,28 @@ const updateOrder = (req, res) => {
         });
 }
 
+const deleteOrderById = (req, res) => {
+
+    const orderId = req.params.idOrder;
+
+    db.query('DELETE FROM Orders WHERE order_id = ?',
+        {
+            type: Sequelize.QueryTypes.DELETE,
+            replacements: [orderId]
+        })
+        .then(result => {
+            res.json({ msg: 'order successfully deleted' });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'internal error' });
+        });
+}
+
 module.exports = {
     createOrder,
     allOrders,
     orderById,
-    updateOrder
+    updateOrder,
+    deleteOrderById
 }

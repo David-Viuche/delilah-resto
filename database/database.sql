@@ -102,9 +102,9 @@ ALTER TABLE `Users`
 
 
 ALTER TABLE `Orders`
-  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`order_id_user`) REFERENCES `Users` (`user_id`);
+  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`order_id_user`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE;
 
 ALTER TABLE `Order_detail`
-  ADD CONSTRAINT `Order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `Orders` (`order_id`),
+  ADD CONSTRAINT `Order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `Orders` (`order_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `Order_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `Products` (`product_id`);
 COMMIT;

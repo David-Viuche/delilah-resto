@@ -1,5 +1,6 @@
 openapi: 3.0.0
 servers:
+# Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/David-Viuche/delilah-resto/1.0.0
   - description: Servidor local para el API
@@ -403,6 +404,27 @@ paths:
                   type: string
                   example: 'cooking'
         description: order state to update
+    delete:
+      tags:
+        - admins
+      summary: delete specific order 
+      parameters:
+        - name: idOrder
+          in: path
+          required: true
+          description: unique order id
+          schema:
+            type: string
+      description: delete specific order
+      security:
+        - autenticationJWT: []
+      responses:
+        '200':
+          description: order deleted
+        '401':
+          description: Unauthorized user to do this operation or invalid token
+        '404':
+          description: order not found
 
 components:
   schemas:
